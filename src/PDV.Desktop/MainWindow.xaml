@@ -1,0 +1,119 @@
+<Window x:Class="PDV.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="PDV Fiscal - Sistema de Ponto de Venda" 
+        Height="900" Width="1400"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#2C3E50" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="PDV FISCAL" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               Foreground="White" 
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text=" - Sistema de Ponto de Venda" 
+                               FontSize="16" 
+                               Foreground="#BDC3C7" 
+                               VerticalAlignment="Center" 
+                               Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,20,0">
+                    <TextBlock Text="Usuário: " 
+                               Foreground="White" 
+                               VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtUsuario" 
+                               Text="Operador" 
+                               Foreground="#3498DB" 
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock Text="Caixa: " 
+                               Foreground="White" 
+                               VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtCaixa" 
+                               Text="01" 
+                               Foreground="#E74C3C" 
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- WebView2 Container -->
+        <Grid Grid.Row="1">
+            <wv2:WebView2 x:Name="webView" 
+                          NavigationCompleted="WebView_NavigationCompleted"
+                          NavigationStarting="WebView_NavigationStarting"/>
+            
+            <!-- Loading Overlay -->
+            <Border x:Name="loadingOverlay" 
+                    Background="#80000000" 
+                    Visibility="Visible">
+                <StackPanel HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" 
+                                 Width="200" 
+                                 Height="4" 
+                                 Margin="0,0,0,10"/>
+                    <TextBlock Text="Carregando PDV..." 
+                               Foreground="White" 
+                               FontSize="16" 
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="2" 
+                Background="#34495E" 
+                Padding="10,5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                           x:Name="txtStatus" 
+                           Text="Sistema pronto" 
+                           Foreground="White" 
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="1" 
+                           x:Name="txtDataHora" 
+                           Text="01/01/2024 12:00:00" 
+                           Foreground="#BDC3C7" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,20,0"/>
+
+                <TextBlock Grid.Column="2" 
+                           x:Name="txtVersao" 
+                           Text="v1.0.0" 
+                           Foreground="#BDC3C7" 
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window> 
