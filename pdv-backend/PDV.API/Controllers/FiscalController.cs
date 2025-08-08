@@ -1,0 +1,398 @@
+using Microsoft.AspNetCore.Mvc;
+using PDV.Core.Entities;
+using PDV.Core.Interfaces;
+using PDV.Fiscal.Services;
+
+namespace PDV.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class FiscalController : ControllerBase
+{
+    private readonly NFCeService _nfcService;
+    private readonly SATService _satService;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<FiscalController> _logger;
+
+    public FiscalController(NFCeService nfcService, SATService satService, IUnitOfWork unitOfWork, ILogger<FiscalController> logger)
+    {
+        _nfcService = nfcService;
+        _satService = satService;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
+    }
+
+    [HttpPost("nfce/emitir")]
+    public async Task<ActionResult<object>> EmitirNFCe([FromBody] EmitirDocumentoRequest request)
+    {
+        try
+        {
+            var venda = await _unitOfWork.Vendas.GetByIdAsync(request.VendaId);
+            if (venda == null)
+            {
+                return NotFound(new { error = "Venda não encontrada" });
+            }
+
+            // Buscar dados da empresa (simulado)
+            var empresa = new Empresa
+            {
+                CNPJ = "12345678000195",
+                RazaoSocial = "EMPRESA EXEMPLO LTDA",
+                NomeFantasia = "EXEMPLO",
+                NumeroSerieNFCe = "123456789",
+                UF = "SP",
+                Cidade = "São Paulo",
+                Endereco = "Rua Exemplo",
+                Numero = "123",
+                Bairro = "Centro",
+                CEP = "01234-567"
+            };
+
+            var resultado = await _nfcService.EmitirNFCeAsync(venda, empresa);
+
+            if (resultado.Sucesso)
+            {
+                _unitOfWork.Vendas.Update(venda);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    sucesso = true,
+                    chaveAcesso = resultado.ChaveAcesso,
+                    numeroProtocolo = resultado.NumeroProtocolo,
+                    danfe = venda.DANFENFCe
+                });
+            }
+            else
+            {
+                return BadRequest(new { error = resultado.MensagemErro });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao emitir NFC-e");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpPost("nfce/cancelar")]
+    public async Task<ActionResult<object>> CancelarNFCe([FromBody] CancelarDocumentoRequest request)
+    {
+        try
+        {
+            var venda = await _unitOfWork.Vendas.GetByIdAsync(request.VendaId);
+            if (venda == null)
+            {
+                return NotFound(new { error = "Venda não encontrada" });
+            }
+
+            var empresa = new Empresa
+            {
+                CNPJ = "12345678000195",
+                RazaoSocial = "EMPRESA EXEMPLO LTDA",
+                UF = "SP"
+            };
+
+            var resultado = await _nfcService.CancelarNFCeAsync(venda, empresa, request.Justificativa);
+
+            if (resultado.Sucesso)
+            {
+                _unitOfWork.Vendas.Update(venda);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new { sucesso = true, mensagem = "NFC-e cancelada com sucesso" });
+            }
+            else
+            {
+                return BadRequest(new { error = resultado.MensagemErro });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao cancelar NFC-e");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpPost("sat/emitir")]
+    public async Task<ActionResult<object>> EmitirSAT([FromBody] EmitirDocumentoRequest request)
+    {
+        try
+        {
+            var venda = await _unitOfWork.Vendas.GetByIdAsync(request.VendaId);
+            if (venda == null)
+            {
+                return NotFound(new { error = "Venda não encontrada" });
+            }
+
+            var empresa = new Empresa
+            {
+                CNPJ = "12345678000195",
+                RazaoSocial = "EMPRESA EXEMPLO LTDA",
+                NomeFantasia = "EXEMPLO",
+                NumeroSerieSAT = "123456789",
+                UF = "SP",
+                Cidade = "São Paulo",
+                Endereco = "Rua Exemplo",
+                Numero = "123",
+                Bairro = "Centro",
+                CEP = "01234-567"
+            };
+
+            var resultado = await _satService.EmitirCFeAsync(venda, empresa);
+
+            if (resultado.Sucesso)
+            {
+                _unitOfWork.Vendas.Update(venda);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    sucesso = true,
+                    chaveAcesso = resultado.ChaveAcesso,
+                    numeroCFe = resultado.NumeroCFe,
+                    protocolo = resultado.Protocolo,
+                    danfe = venda.DANFESAT
+                });
+            }
+            else
+            {
+                return BadRequest(new { error = resultado.MensagemErro });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao emitir CFe-SAT");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpPost("sat/cancelar")]
+    public async Task<ActionResult<object>> CancelarSAT([FromBody] CancelarDocumentoRequest request)
+    {
+        try
+        {
+            var venda = await _unitOfWork.Vendas.GetByIdAsync(request.VendaId);
+            if (venda == null)
+            {
+                return NotFound(new { error = "Venda não encontrada" });
+            }
+
+            var empresa = new Empresa
+            {
+                CNPJ = "12345678000195",
+                RazaoSocial = "EMPRESA EXEMPLO LTDA",
+                NumeroSerieSAT = "123456789"
+            };
+
+            var resultado = await _satService.CancelarCFeAsync(venda, empresa, request.Justificativa);
+
+            if (resultado.Sucesso)
+            {
+                _unitOfWork.Vendas.Update(venda);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(new { sucesso = true, mensagem = "CFe-SAT cancelado com sucesso" });
+            }
+            else
+            {
+                return BadRequest(new { error = resultado.MensagemErro });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao cancelar CFe-SAT");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpGet("sat/status")]
+    public async Task<ActionResult<object>> VerificarStatusSAT()
+    {
+        try
+        {
+            var status = await _satService.VerificarStatusSATAsync();
+
+            return Ok(new
+            {
+                status = status.ToString(),
+                disponivel = status == StatusSAT.Disponivel,
+                mensagem = ObterMensagemStatusSAT(status)
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao verificar status do SAT");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpGet("sat/consultar/{chaveAcesso}")]
+    public async Task<ActionResult<object>> ConsultarSAT(string chaveAcesso)
+    {
+        try
+        {
+            var resultado = await _satService.ConsultarSATAsync(chaveAcesso);
+
+            if (resultado.Sucesso)
+            {
+                return Ok(new
+                {
+                    sucesso = true,
+                    chaveAcesso = resultado.ChaveAcesso,
+                    numeroCFe = resultado.NumeroCFe,
+                    protocolo = resultado.Protocolo
+                });
+            }
+            else
+            {
+                return NotFound(new { error = resultado.MensagemErro });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao consultar CFe-SAT");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpGet("documentos/{vendaId}")]
+    public async Task<ActionResult<object>> ObterDocumentosFiscais(Guid vendaId)
+    {
+        try
+        {
+            var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
+            if (venda == null)
+            {
+                return NotFound(new { error = "Venda não encontrada" });
+            }
+
+            return Ok(new
+            {
+                venda = new
+                {
+                    id = venda.Id,
+                    numeroVenda = venda.NumeroVenda,
+                    dataVenda = venda.DataVenda,
+                    total = venda.Total
+                },
+                nfce = new
+                {
+                    status = venda.StatusNFCe?.ToString(),
+                    numero = venda.NumeroNFCe,
+                    chaveAcesso = venda.ChaveAcessoNFCe,
+                    protocolo = venda.ProtocoloNFCe,
+                    dataEmissao = venda.DataEmissaoNFCe,
+                    danfe = venda.DANFENFCe
+                },
+                sat = new
+                {
+                    status = venda.StatusSAT?.ToString(),
+                    numero = venda.NumeroSAT,
+                    chaveAcesso = venda.ChaveAcessoSAT,
+                    protocolo = venda.ProtocoloSAT,
+                    dataEmissao = venda.DataEmissaoSAT,
+                    danfe = venda.DANFESAT
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao obter documentos fiscais");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    [HttpGet("relatorio")]
+    public async Task<ActionResult<object>> GerarRelatorioFiscal(
+        [FromQuery] DateTime? dataInicio,
+        [FromQuery] DateTime? dataFim,
+        [FromQuery] string? tipoDocumento)
+    {
+        try
+        {
+            var vendas = await _unitOfWork.Vendas.GetAllAsync();
+
+            // Aplicar filtros
+            if (dataInicio.HasValue)
+            {
+                vendas = vendas.Where(v => v.DataVenda >= dataInicio.Value).ToList();
+            }
+
+            if (dataFim.HasValue)
+            {
+                vendas = vendas.Where(v => v.DataVenda <= dataFim.Value).ToList();
+            }
+
+            var vendasComNFCe = vendas.Where(v => v.StatusNFCe == StatusNFCe.Emitida).ToList();
+            var vendasComSAT = vendas.Where(v => v.StatusSAT == StatusSAT.Emitido).ToList();
+
+            var relatorio = new
+            {
+                periodo = new
+                {
+                    inicio = dataInicio?.ToString("dd/MM/yyyy"),
+                    fim = dataFim?.ToString("dd/MM/yyyy")
+                },
+                resumo = new
+                {
+                    totalVendas = vendas.Count,
+                    vendasComNFCe = vendasComNFCe.Count,
+                    vendasComSAT = vendasComSAT.Count,
+                    valorTotalNFCe = vendasComNFCe.Sum(v => v.Total),
+                    valorTotalSAT = vendasComSAT.Sum(v => v.Total)
+                },
+                detalhamento = new
+                {
+                    nfce = vendasComNFCe.Select(v => new
+                    {
+                        numeroVenda = v.NumeroVenda,
+                        numeroNFCe = v.NumeroNFCe,
+                        chaveAcesso = v.ChaveAcessoNFCe,
+                        dataEmissao = v.DataEmissaoNFCe,
+                        valor = v.Total
+                    }),
+                    sat = vendasComSAT.Select(v => new
+                    {
+                        numeroVenda = v.NumeroVenda,
+                        numeroSAT = v.NumeroSAT,
+                        chaveAcesso = v.ChaveAcessoSAT,
+                        dataEmissao = v.DataEmissaoSAT,
+                        valor = v.Total
+                    })
+                }
+            };
+
+            return Ok(relatorio);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao gerar relatório fiscal");
+            return StatusCode(500, new { error = "Erro interno do servidor" });
+        }
+    }
+
+    private string ObterMensagemStatusSAT(StatusSAT status)
+    {
+        return status switch
+        {
+            StatusSAT.Disponivel => "SAT disponível e funcionando normalmente",
+            StatusSAT.Indisponivel => "SAT indisponível ou não conectado",
+            StatusSAT.Erro => "Erro na comunicação com SAT",
+            StatusSAT.Emitido => "Documento emitido com sucesso",
+            StatusSAT.Cancelado => "Documento cancelado",
+            _ => "Status desconhecido"
+        };
+    }
+}
+
+public class EmitirDocumentoRequest
+{
+    public Guid VendaId { get; set; }
+}
+
+public class CancelarDocumentoRequest
+{
+    public Guid VendaId { get; set; }
+    public string Justificativa { get; set; } = string.Empty;
+} 
