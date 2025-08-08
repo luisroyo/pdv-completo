@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variáveis CSS para temas dinâmicos */
+:root {
+    /* Tema padrão - será sobrescrito pelos temas JSON */
+    --color-primary: #2563eb;
+    --color-secondary: #64748b;
+    --color-accent: #f59e0b;
+    --color-background: #ffffff;
+    --color-surface: #f8fafc;
+    --color-text: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --font-family: 'Inter', system-ui, sans-serif;
+
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    /* Bordas */
+    --border-radius: 0.5rem;
+    --border-color: #e2e8f0;
+}
+
+/* Tema escuro */
+.dark {
+    --color-background: #0f172a;
+    --color-surface: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --border-color: #334155;
+}
+
+/* Estilos base personalizados */
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-text font-sans;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-surface;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-secondary rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-primary;
+    }
+}
+
+/* Componentes personalizados */
+@layer components {
+
+    /* Botões */
+    .btn {
+        @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+    }
+
+    .btn-primary {
+        @apply bg-primary text-white hover:bg-primary/90;
+    }
+
+    .btn-secondary {
+        @apply bg-secondary text-white hover:bg-secondary/90;
+    }
+
+    .btn-outline {
+        @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+    }
+
+    .btn-ghost {
+        @apply hover:bg-accent hover:text-accent-foreground;
+    }
+
+    .btn-sm {
+        @apply h-9 px-3 rounded-md;
+    }
+
+    .btn-md {
+        @apply h-10 py-2 px-4;
+    }
+
+    .btn-lg {
+        @apply h-11 px-8 rounded-md;
+    }
+
+    /* Inputs */
+    .input {
+        @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    /* Cards */
+    .card {
+        @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+    }
+
+    .card-header {
+        @apply flex flex-col space-y-1.5 p-6;
+    }
+
+    .card-title {
+        @apply text-2xl font-semibold leading-none tracking-tight;
+    }
+
+    .card-description {
+        @apply text-sm text-muted-foreground;
+    }
+
+    .card-content {
+        @apply p-6 pt-0;
+    }
+
+    .card-footer {
+        @apply flex items-center p-6 pt-0;
+    }
+
+    /* Animações */
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.3s ease-out;
+    }
+
+    .animate-bounce-in {
+        animation: bounceIn 0.6s ease-out;
+    }
+}
+
+/* Utilitários personalizados */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "name": "Padaria Central",
+    "description": "Tema personalizado para padarias",
+    "logo": "/logos/padaria-central.png",
+    "primaryColor": "#d97706",
+    "secondaryColor": "#92400e",
+    "accentColor": "#fbbf24",
+    "backgroundColor": "#fef3c7",
+    "surfaceColor": "#fde68a",
+    "textColor": "#451a03",
+    "textSecondaryColor": "#92400e",
+    "successColor": "#059669",
+    "warningColor": "#d97706",
+    "errorColor": "#dc2626",
+    "fontFamily": "Roboto",
+    "iconPack": "food",
+    "features": {
+        "darkMode": false,
+        "animations": true,
+        "customIcons": true
+    }
+}

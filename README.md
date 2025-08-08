@@ -1,247 +1,247 @@
-# PDV Fiscal - Sistema de Ponto de Venda
+# PDV Completo - Sistema de Ponto de Venda Fiscal
 
-Sistema completo de PDV (Ponto de Venda) desenvolvido para atender às exigências fiscais brasileiras, com suporte a NFC-e, SAT, TEF e controle completo de vendas.
+Sistema completo de PDV (Ponto de Venda) desenvolvido para atender estabelecimentos comerciais brasileiros com todas as funcionalidades fiscais obrigatórias.
 
-## 🚀 Características Principais
+## 🏗️ Arquitetura do Projeto
 
-### ⚙️ Stack Tecnológica
-- **Backend**: C# com .NET 8
-- **Interface**: HTML/CSS/JS embutida via WebView2
-- **Banco Principal**: PostgreSQL
-- **Banco Local**: SQLite (modo offline)
-- **Comunicação**: API REST interna (localhost)
-
-### 🧾 Funcionalidades Obrigatórias
-- ✅ Cadastro de produtos com campos fiscais (CFOP, NCM, CST, CEST)
-- ✅ Cadastro de clientes (CPF/CNPJ)
-- ✅ Cadastro de usuários e permissões
-- ✅ Emissão de NFC-e com integração SEFAZ
-- ✅ Integração com SAT Fiscal (SP)
-- ✅ Integração com TEF (PayGo, Sitef)
-- ✅ Suporte a impressora térmica e balança
-- ✅ Controle de caixa (abertura/fechamento)
-- ✅ Relatórios fiscais (X, Z, Redução Z)
-- ✅ Modo contingência offline
-- ✅ Cancelamento de vendas
-- ✅ Controle de estoque automático
-- ✅ Múltiplos pagamentos
-- ✅ Cupons promocionais
-- ✅ Backup automático
-
-### 🔐 Segurança
-- ✅ Controle de acesso com login/senha
-- ✅ Logs de auditoria
-- ✅ Criptografia de dados sensíveis
-- ✅ Atualização automática com rollback
-
-## 📁 Estrutura do Projeto
+O projeto está organizado em duas partes principais:
 
 ```
 pdv/
-├── src/
-│   ├── PDV.Core/                 # Entidades e interfaces
-│   ├── PDV.Infrastructure/       # Entity Framework e repositórios
-│   ├── PDV.Application/          # Serviços de negócio
-│   ├── PDV.Fiscal/              # Integração fiscal (NFC-e, SAT)
-│   ├── PDV.API/                 # API REST
-│   └── PDV.Desktop/             # Aplicação desktop com WebView2
-├── tests/
-│   └── PDV.Tests/               # Testes automatizados
-├── appsettings.json             # Configurações
-└── README.md                    # Documentação
+├── pdv-backend/          # Backend C# (.NET 8)
+│   ├── PDV.sln          # Solution principal
+│   ├── PDV.Core/        # Entidades e interfaces
+│   ├── PDV.Infrastructure/ # Repositórios e contexto
+│   ├── PDV.Application/ # Serviços de negócio
+│   ├── PDV.Fiscal/      # Integrações fiscais
+│   ├── PDV.API/         # API REST
+│   ├── PDV.Desktop/     # Aplicação WPF
+│   ├── appsettings.json # Configurações
+│   ├── docker-compose.yml # PostgreSQL + PgAdmin
+│   └── start-pdv.ps1    # Script de inicialização
+│
+├── pdv-frontend/         # Frontend React
+│   ├── src/             # Código fonte React
+│   ├── public/          # Assets públicos
+│   ├── package.json     # Dependências
+│   ├── vite.config.js   # Configuração Vite
+│   ├── tailwind.config.js # Configuração Tailwind
+│   └── README.md        # Documentação frontend
+│
+├── README.md            # Este arquivo
+└── .gitignore          # Arquivos ignorados pelo Git
 ```
 
-## 🛠️ Instalação e Configuração
+## 🚀 Características Principais
 
-### Pré-requisitos
-- .NET 8 SDK
-- PostgreSQL (opcional, SQLite é usado por padrão)
-- WebView2 Runtime (Windows)
+### ✅ **Backend C# (.NET 8)**
+- **Clean Architecture** com separação clara de responsabilidades
+- **Entity Framework Core** com suporte a PostgreSQL e SQLite
+- **API REST** com autenticação JWT
+- **Integração Fiscal** (NFC-e, SAT, TEF)
+- **Multi-empresa** e multi-filial
+- **Controle de permissões** granular
+- **Aplicação Desktop** WPF com WebView2
 
-### 1. Clone o repositório
+### ✅ **Frontend React**
+- **Sistema de temas dinâmicos** via JSON
+- **PWA** com funcionalidade offline
+- **Tailwind CSS** para estilização
+- **Zustand** para gerenciamento de estado
+- **Interface responsiva** para touch e teclado
+- **Atalhos de teclado** otimizados para PDV
+
+### ✅ **Funcionalidades PDV**
+- **Vendas** com múltiplas formas de pagamento
+- **Gestão de caixa** com controle de movimentos
+- **Controle de estoque** automático
+- **Relatórios fiscais** (X, Z, Redução Z)
+- **Integração com hardware** (impressora, balança, scanner)
+- **Modo offline** com sincronização
+
+## 🛠️ Stack Tecnológica
+
+### **Backend**
+- **.NET 8** - Framework principal
+- **Entity Framework Core** - ORM
+- **PostgreSQL** - Banco principal
+- **SQLite** - Banco local/offline
+- **AutoMapper** - Mapeamento de objetos
+- **FluentValidation** - Validações
+- **JWT** - Autenticação
+
+### **Frontend**
+- **React 18** - Biblioteca principal
+- **Vite** - Build tool
+- **Tailwind CSS** - Framework CSS
+- **Zustand** - Gerenciamento de estado
+- **Axios** - Cliente HTTP
+- **PWA** - Progressive Web App
+
+### **Fiscal**
+- **NFC-e** - Nota Fiscal de Consumidor Eletrônica
+- **SAT** - Sistema Autenticador e Transmissor
+- **TEF** - Transferência Eletrônica de Fundos
+- **XML** - Geração e validação de documentos
+
+## 📋 Pré-requisitos
+
+### **Desenvolvimento**
+- **Visual Studio 2022** ou **VS Code**
+- **.NET 8 SDK**
+- **Node.js 18+**
+- **PostgreSQL 14+**
+- **Docker** (opcional)
+
+### **Produção**
+- **Windows Server** ou **Linux**
+- **PostgreSQL**
+- **Certificado Digital** para emissão fiscal
+
+## 🚀 Instalação e Configuração
+
+### **1. Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/pdv-fiscal.git
-cd pdv-fiscal
+git clone https://github.com/luisroyo/pdv-completo.git
+cd pdv-completo
 ```
 
-### 2. Restaurar dependências
+### **2. Configurar Backend**
 ```bash
+cd pdv-backend
+
+# Instalar dependências
 dotnet restore
+
+# Configurar banco de dados
+docker-compose up -d
+
+# Executar migrações
+dotnet ef database update --project PDV.Infrastructure --startup-project PDV.API
+
+# Executar API
+dotnet run --project PDV.API
 ```
 
-### 3. Configurar banco de dados
-Edite o arquivo `appsettings.json`:
+### **3. Configurar Frontend**
+```bash
+cd pdv-frontend
 
+# Instalar dependências
+npm install
+
+# Executar em desenvolvimento
+npm run dev
+```
+
+### **4. Executar Desktop**
+```bash
+cd pdv-backend
+dotnet run --project PDV.Desktop
+```
+
+## 📱 Funcionalidades por Módulo
+
+### **🔐 Autenticação e Segurança**
+- Login com usuário/senha
+- Controle de permissões por grupo
+- Auditoria de ações sensíveis
+- Criptografia de dados sensíveis
+
+### **🏪 Gestão de Estabelecimentos**
+- Cadastro de empresas
+- Múltiplas filiais
+- Configurações fiscais por estado
+- Logos e temas personalizados
+
+### **📦 Gestão de Produtos**
+- Cadastro com código de barras
+- Categorização e subcategorias
+- Controle de estoque mínimo
+- Campos fiscais (NCM, CFOP, CST)
+
+### **👥 Gestão de Clientes**
+- Cadastro de CPF/CNPJ
+- Endereços completos
+- Histórico de compras
+- Classificação de clientes
+
+### **💰 Vendas e Caixa**
+- Interface otimizada para vendas rápidas
+- Múltiplas formas de pagamento
+- Controle de caixa (abertura/fechamento)
+- Movimentos de entrada/saída
+
+### **📊 Relatórios e Analytics**
+- Relatórios fiscais obrigatórios
+- Gráficos de vendas
+- Análise de produtos mais vendidos
+- Exportação de dados
+
+### **⚙️ Configurações**
+- Temas dinâmicos
+- Configurações de hardware
+- Backup automático
+- Sincronização offline
+
+## 🔧 Configurações Específicas
+
+### **Fiscal**
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=pdv.db",
-    "PostgreSQL": "Host=localhost;Database=pdv;Username=postgres;Password=sua_senha"
+  "NFCe": {
+    "Ambiente": "Homologacao",
+    "Certificado": "path/to/certificate.pfx",
+    "Senha": "senha_certificado"
+  },
+  "SAT": {
+    "Ambiente": "Homologacao",
+    "CodigoAtivacao": "12345678"
   }
 }
 ```
 
-### 4. Executar migrações
-```bash
-cd src/PDV.API
-dotnet ef database update
+### **Hardware**
+```json
+{
+  "Impressora": {
+    "Porta": "COM1",
+    "Modelo": "Epson TM-T20"
+  },
+  "Balança": {
+    "Porta": "COM2",
+    "Protocolo": "Toledo"
+  }
+}
 ```
 
-### 5. Executar o sistema
-```bash
-# Executar API
-cd src/PDV.API
-dotnet run
+## 🧪 Testes
 
-# Em outro terminal, executar desktop
-cd src/PDV.Desktop
-dotnet run
+### **Backend**
+```bash
+cd pdv-backend
+dotnet test
 ```
 
-## 📋 Configuração Fiscal
+### **Frontend**
+```bash
+cd pdv-frontend
+npm run test
+```
 
-### NFC-e
-1. Configure o certificado digital no `appsettings.json`
-2. Defina o número de série da NFC-e
-3. Configure CSC e tokens da SEFAZ
+## 📦 Deploy
 
-### SAT (São Paulo)
-1. Configure o código de ativação
-2. Defina o número de série do SAT
+### **Backend**
+```bash
+cd pdv-backend
+dotnet publish PDV.API -c Release -o ./publish
+```
 
-### TEF
-1. Configure o provedor (PayGo, Sitef)
-2. Defina as configurações específicas
-
-## 🔧 Desenvolvimento
-
-### Estrutura de Camadas
-
-#### Core (PDV.Core)
-- **Entidades**: Empresa, Filial, Usuario, Produto, Cliente, Venda, etc.
-- **Interfaces**: IRepository, IUnitOfWork
-- **Enums**: StatusVenda, TipoPagamento, etc.
-
-#### Infrastructure (PDV.Infrastructure)
-- **DbContext**: PDVDbContext com configurações PostgreSQL/SQLite
-- **Repositórios**: Implementações dos repositórios
-- **UnitOfWork**: Gerenciamento de transações
-
-#### Application (PDV.Application)
-- **Serviços**: VendaService, ProdutoService, etc.
-- **Validações**: FluentValidation
-- **Mapeamentos**: AutoMapper
-
-#### Fiscal (PDV.Fiscal)
-- **NFCeService**: Emissão e cancelamento de NFC-e
-- **SATService**: Integração com SAT
-- **TEFService**: Integração com TEF
-
-#### API (PDV.API)
-- **Controllers**: VendasController, ProdutosController, etc.
-- **Configuração**: Program.cs com DI e CORS
-
-#### Desktop (PDV.Desktop)
-- **MainWindow**: Interface principal com WebView2
-- **App**: Configuração do WPF
-
-### Padrões Utilizados
-- **Clean Architecture**: Separação clara de responsabilidades
-- **Repository Pattern**: Abstração do acesso a dados
-- **Unit of Work**: Gerenciamento de transações
-- **Dependency Injection**: Inversão de controle
-- **CQRS**: Separação de comandos e consultas
-
-## 📊 Funcionalidades por Módulo
-
-### Módulo de Vendas
-- Criação de vendas
-- Adição de itens
-- Aplicação de descontos
-- Múltiplos pagamentos
-- Finalização com NFC-e
-- Cancelamento com justificativa
-
-### Módulo Fiscal
-- Emissão de NFC-e
-- Cancelamento de NFC-e
-- Integração SAT (SP)
-- Modo contingência
-- Validação de XML
-- Geração de DANFE
-
-### Módulo de Produtos
-- Cadastro com campos fiscais
-- Controle de estoque
-- Categorização
-- Preços e promoções
-- Códigos de barras
-
-### Módulo de Clientes
-- Cadastro CPF/CNPJ
-- Endereços
-- Limite de crédito
-- Histórico de compras
-
-### Módulo de Caixa
-- Abertura/fechamento
-- Sangrias e suprimentos
-- Controle de saldo
-- Relatórios
-
-### Módulo de Relatórios
-- Relatório X (vendas do dia)
-- Relatório Z (fechamento)
-- Redução Z
-- Vendas por CFOP/NCM
-- Estoque
-- Clientes
-
-## 🔒 Segurança e Auditoria
-
-### Controle de Acesso
-- Login com usuário/senha
-- Controle de permissões por módulo
-- Sessões seguras
-- Logout automático
-
-### Logs de Auditoria
-- Todas as operações são logadas
-- Logs de vendas, cancelamentos, aberturas de caixa
-- Logs de acesso e tentativas de login
-- Logs de operações fiscais
-
-### Criptografia
-- Senhas criptografadas
-- Dados sensíveis criptografados
-- Backup criptografado
-- Comunicação segura
-
-## 🚀 Deploy e Produção
-
-### Requisitos de Produção
-- Windows Server 2019+
-- .NET 8 Runtime
-- PostgreSQL 13+
-- WebView2 Runtime
-- Certificado digital válido
-- Impressora térmica configurada
-
-### Backup
-- Backup automático diário
-- Backup criptografado
-- Envio para nuvem
-- Restauração automática
-
-### Monitoramento
-- Logs estruturados
-- Métricas de performance
-- Alertas de erro
-- Dashboard de status
-
-## 📝 Licença
-
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+### **Frontend**
+```bash
+cd pdv-frontend
+npm run build
+```
 
 ## 🤝 Contribuição
 
@@ -251,19 +251,39 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
 ## 📞 Suporte
 
-Para suporte técnico ou dúvidas:
-- Email: suporte@pdv-fiscal.com
-- Documentação: [docs.pdv-fiscal.com](https://docs.pdv-fiscal.com)
-- Issues: [GitHub Issues](https://github.com/seu-usuario/pdv-fiscal/issues)
+- **Email**: suporte@pdv.com
+- **Documentação**: [docs.pdv.com](https://docs.pdv.com)
+- **Issues**: [GitHub Issues](https://github.com/luisroyo/pdv-completo/issues)
 
-## 🔄 Changelog
+## 🎯 Roadmap
 
-### v1.0.0 (2024-01-01)
-- ✅ Versão inicial do sistema
-- ✅ Módulo de vendas completo
-- ✅ Integração NFC-e
-- ✅ Controle de caixa
-- ✅ Interface WebView2
-- ✅ Backup automático 
+### **Versão 1.0** ✅
+- [x] Estrutura base do projeto
+- [x] Autenticação e autorização
+- [x] CRUD básico de entidades
+- [x] Interface de vendas
+- [x] Sistema de temas
+
+### **Versão 1.1** 🚧
+- [ ] Integração NFC-e
+- [ ] Integração SAT
+- [ ] Integração TEF
+- [ ] Impressora térmica
+- [ ] Balança integrada
+
+### **Versão 1.2** 📋
+- [ ] Relatórios avançados
+- [ ] Backup automático
+- [ ] Sincronização offline
+- [ ] App mobile
+- [ ] Integração com ERPs
+
+---
+
+**Desenvolvido com ❤️ para o mercado brasileiro** 

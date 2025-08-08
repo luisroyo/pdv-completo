@@ -1,0 +1,22 @@
+{
+    "name": "Farmácia Popular",
+    "description": "Tema personalizado para farmácias",
+    "logo": "/logos/farmacia-popular.png",
+    "primaryColor": "#059669",
+    "secondaryColor": "#047857",
+    "accentColor": "#34d399",
+    "backgroundColor": "#ecfdf5",
+    "surfaceColor": "#d1fae5",
+    "textColor": "#064e3b",
+    "textSecondaryColor": "#047857",
+    "successColor": "#059669",
+    "warningColor": "#d97706",
+    "errorColor": "#dc2626",
+    "fontFamily": "Inter",
+    "iconPack": "pharmacy",
+    "features": {
+        "darkMode": true,
+        "animations": true,
+        "customIcons": true
+    }
+}

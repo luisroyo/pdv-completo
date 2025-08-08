@@ -1,0 +1,22 @@
+{
+    "name": "PDV Padrão",
+    "description": "Tema padrão do sistema PDV",
+    "logo": "/logos/pdv-default.png",
+    "primaryColor": "#2563eb",
+    "secondaryColor": "#64748b",
+    "accentColor": "#f59e0b",
+    "backgroundColor": "#ffffff",
+    "surfaceColor": "#f8fafc",
+    "textColor": "#1e293b",
+    "textSecondaryColor": "#64748b",
+    "successColor": "#10b981",
+    "warningColor": "#f59e0b",
+    "errorColor": "#ef4444",
+    "fontFamily": "Inter",
+    "iconPack": "default",
+    "features": {
+        "darkMode": true,
+        "animations": true,
+        "customIcons": false
+    }
+}
