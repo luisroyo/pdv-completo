@@ -15,6 +15,8 @@
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-error: #ef4444;
+    --color-border: #e2e8f0;
+    --color-ring: #2563eb;
     --font-family: 'Inter', system-ui, sans-serif;
 
     /* Sombras */
@@ -33,7 +35,8 @@
     --color-surface: #1e293b;
     --color-text: #f1f5f9;
     --color-text-secondary: #94a3b8;
-    --border-color: #334155;
+    --color-border: #334155;
+    --color-ring: #3b82f6;
 }
 
 /* Estilos base personalizados */
@@ -71,15 +74,15 @@
 
     /* Botões */
     .btn {
-        @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+        @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none;
     }
 
     .btn-primary {
-        @apply bg-primary text-white hover:bg-primary/90;
+        @apply bg-primary text-white hover:bg-blue-600;
     }
 
     .btn-secondary {
-        @apply bg-secondary text-white hover:bg-secondary/90;
+        @apply bg-secondary text-white hover:bg-gray-600;
     }
 
     .btn-outline {
@@ -104,12 +107,12 @@
 
     /* Inputs */
     .input {
-        @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+        @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
     }
 
     /* Cards */
     .card {
-        @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+        @apply rounded-lg border bg-surface text-text shadow-sm;
     }
 
     .card-header {

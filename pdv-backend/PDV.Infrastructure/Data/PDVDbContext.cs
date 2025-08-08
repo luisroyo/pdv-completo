@@ -149,6 +149,14 @@ public class PDVDbContext : DbContext
                   .WithMany(e => e.Caixas)
                   .HasForeignKey(e => e.FilialId)
                   .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.UsuarioAbertura)
+                  .WithMany()
+                  .HasForeignKey(e => e.UsuarioAberturaId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.UsuarioFechamento)
+                  .WithMany()
+                  .HasForeignKey(e => e.UsuarioFechamentoId)
+                  .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<MovimentoCaixa>(entity =>

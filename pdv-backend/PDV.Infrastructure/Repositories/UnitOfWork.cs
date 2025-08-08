@@ -20,8 +20,7 @@ public class UnitOfWork : IUnitOfWork
         Caixas = new Repository<Core.Entities.Caixa>(context);
         Vendas = new Repository<Core.Entities.Venda>(context);
         MovimentosEstoque = new Repository<Core.Entities.MovimentoEstoque>(context);
-        NotasFiscais = new Repository<Core.Entities.NotaFiscal>(context);
-        CuponsDesconto = new Repository<Core.Entities.CupomDesconto>(context);
+        MovimentosCaixa = new Repository<Core.Entities.MovimentoCaixa>(context);
     }
 
     public IRepository<Core.Entities.Empresa> Empresas { get; }
@@ -32,8 +31,7 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<Core.Entities.Caixa> Caixas { get; }
     public IRepository<Core.Entities.Venda> Vendas { get; }
     public IRepository<Core.Entities.MovimentoEstoque> MovimentosEstoque { get; }
-    public IRepository<Core.Entities.NotaFiscal> NotasFiscais { get; }
-    public IRepository<Core.Entities.CupomDesconto> CuponsDesconto { get; }
+    public IRepository<Core.Entities.MovimentoCaixa> MovimentosCaixa { get; }
 
     public async Task<int> SaveChangesAsync()
     {

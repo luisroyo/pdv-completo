@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PDV.Application.Services;
 using PDV.Core.Entities;
 using PDV.Core.Interfaces;
-using PDV.Fiscal.Services;
+// using PDV.Fiscal.Services;
 
 namespace PDV.API.Controllers;
 
@@ -11,14 +11,14 @@ namespace PDV.API.Controllers;
 public class VendasController : ControllerBase
 {
     private readonly VendaService _vendaService;
-    private readonly NFCeService _nfcService;
+    // private readonly NFCeService _nfcService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<VendasController> _logger;
 
-    public VendasController(VendaService vendaService, NFCeService nfcService, IUnitOfWork unitOfWork, ILogger<VendasController> logger)
+    public VendasController(VendaService vendaService, /* NFCeService nfcService, */ IUnitOfWork unitOfWork, ILogger<VendasController> logger)
     {
         _vendaService = vendaService;
-        _nfcService = nfcService;
+        // _nfcService = nfcService;
         _unitOfWork = unitOfWork;
         _logger = logger;
     }

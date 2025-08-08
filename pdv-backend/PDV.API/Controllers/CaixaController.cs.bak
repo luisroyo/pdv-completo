@@ -349,8 +349,8 @@ public class CaixaController : ControllerBase
             var movimentacoes = await _unitOfWork.MovimentosCaixa.GetAllAsync();
             var movimentacoesCaixa = movimentacoes.Where(m => m.CaixaId == id).ToList();
 
-            var entradas = movimentacoesCaixa.Where(m => m.Tipo == TipoMovimento.Entrada).Sum(m => m.Valor);
-            var saidas = movimentacoesCaixa.Where(m => m.Tipo == TipoMovimento.Saida).Sum(m => m.Valor);
+            var entradas = movimentacoesCaixa.Where(m => m.Tipo == TipoMovimentoCaixa.Entrada).Sum(m => m.Valor);
+            var saidas = movimentacoesCaixa.Where(m => m.Tipo == TipoMovimentoCaixa.Saida).Sum(m => m.Valor);
 
             var resumo = new
             {
@@ -361,8 +361,8 @@ public class CaixaController : ControllerBase
                 totalMovimentacoes = movimentacoesCaixa.Count,
                 movimentacoesPorTipo = new
                 {
-                    entradas = movimentacoesCaixa.Count(m => m.Tipo == TipoMovimento.Entrada),
-                    saidas = movimentacoesCaixa.Count(m => m.Tipo == TipoMovimento.Saida)
+                    entradas = movimentacoesCaixa.Count(m => m.Tipo == TipoMovimentoCaixa.Entrada),
+                    saidas = movimentacoesCaixa.Count(m => m.Tipo == TipoMovimentoCaixa.Saida)
                 }
             };
 
@@ -391,7 +391,7 @@ public class FecharCaixaRequest
 
 public class AdicionarMovimentacaoRequest
 {
-    public TipoMovimento Tipo { get; set; }
+    public TipoMovimentoCaixa Tipo { get; set; }
     public decimal Valor { get; set; }
     public string Descricao { get; set; } = string.Empty;
     public Guid UsuarioId { get; set; }

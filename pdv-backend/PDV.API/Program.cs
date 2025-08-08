@@ -6,7 +6,7 @@ using PDV.Infrastructure.Data;
 using PDV.Infrastructure.Repositories;
 using PDV.Core.Interfaces;
 using PDV.Application.Services;
-using PDV.Fiscal.Services;
+// using PDV.Fiscal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +68,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Registrar serviços
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<VendaService>();
-builder.Services.AddScoped<NFCeService>();
+// builder.Services.AddScoped<NFCeService>();
 
 // Configurar logging
 builder.Services.AddLogging(logging =>

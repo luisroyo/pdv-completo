@@ -1,6 +1,6 @@
+using Microsoft.Extensions.Logging;
 using PDV.Core.Entities;
 using PDV.Core.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace PDV.Application.Services;
 
@@ -17,188 +17,138 @@ public class VendaService
 
     public async Task<Venda> CriarVendaAsync(Guid caixaId, Guid usuarioId, Guid? clienteId = null)
     {
-        try
+        var numeroVenda = await GerarNumeroVendaAsync(caixaId);
+        
+        var venda = new Venda
         {
-            // Validar se o caixa está aberto
-            var caixa = await _unitOfWork.Caixas.GetByIdAsync(caixaId);
-            if (caixa == null)
-                throw new InvalidOperationException("Caixa não encontrado");
+            NumeroVenda = numeroVenda,
+            DataVenda = DateTime.Now,
+            Status = StatusVenda.EmAndamento,
+            CaixaId = caixaId,
+            UsuarioId = usuarioId,
+            ClienteId = clienteId,
+            SubTotal = 0,
+            Desconto = 0,
+            Total = 0,
+            TotalPago = 0,
+            Troco = 0
+        };
 
-            if (caixa.Status != StatusCaixa.Aberto)
-                throw new InvalidOperationException("Caixa deve estar aberto para criar vendas");
+        await _unitOfWork.Vendas.AddAsync(venda);
+        await _unitOfWork.SaveChangesAsync();
 
-            // Gerar número da venda
-            var numeroVenda = await GerarNumeroVendaAsync(caixaId);
-
-            var venda = new Venda
-            {
-                NumeroVenda = numeroVenda,
-                CaixaId = caixaId,
-                UsuarioId = usuarioId,
-                ClienteId = clienteId,
-                DataVenda = DateTime.Now,
-                Status = StatusVenda.EmAndamento
-            };
-
-            await _unitOfWork.Vendas.AddAsync(venda);
-            await _unitOfWork.SaveChangesAsync();
-
-            _logger.LogInformation("Venda {NumeroVenda} criada com sucesso", numeroVenda);
-            return venda;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao criar venda");
-            throw;
-        }
+        _logger.LogInformation("Venda criada: {NumeroVenda}", numeroVenda);
+        return venda;
     }
 
     public async Task<ItemVenda> AdicionarItemAsync(Guid vendaId, Guid produtoId, decimal quantidade, decimal? precoUnitario = null)
     {
-        try
+        var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
+        if (venda == null)
+            throw new InvalidOperationException("Venda não encontrada");
+
+        if (venda.Status != StatusVenda.EmAndamento)
+            throw new InvalidOperationException("Venda não está em andamento");
+
+        var produto = await _unitOfWork.Produtos.GetByIdAsync(produtoId);
+        if (produto == null)
+            throw new InvalidOperationException("Produto não encontrado");
+
+        if (!produto.IsActive)
+            throw new InvalidOperationException("Produto inativo");
+
+        if (produto.ControlaEstoque && produto.EstoqueAtual < quantidade)
+            throw new InvalidOperationException("Estoque insuficiente");
+
+        var preco = precoUnitario ?? produto.PrecoVenda;
+        var total = preco * quantidade;
+
+        var item = new ItemVenda
         {
-            var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
-            if (venda == null)
-                throw new InvalidOperationException("Venda não encontrada");
+            VendaId = vendaId,
+            ProdutoId = produtoId,
+            NomeProduto = produto.Nome,
+            CodigoProduto = produto.Codigo,
+            Quantidade = quantidade,
+            PrecoUnitario = preco,
+            PrecoTotal = total,
+            Total = total,
+            CFOP = produto.CFOP,
+            NCM = produto.NCM,
+            CST = produto.CST,
+            AliquotaICMS = produto.AliquotaICMS,
+            AliquotaPIS = produto.AliquotaPIS,
+            AliquotaCOFINS = produto.AliquotaCOFINS
+        };
 
-            if (venda.Status != StatusVenda.EmAndamento)
-                throw new InvalidOperationException("Venda não está em andamento");
+        await _unitOfWork.Vendas.AddAsync(venda);
+        await AtualizarTotaisVendaAsync(vendaId);
+        await _unitOfWork.SaveChangesAsync();
 
-            var produto = await _unitOfWork.Produtos.GetByIdAsync(produtoId);
-            if (produto == null)
-                throw new InvalidOperationException("Produto não encontrado");
+        _logger.LogInformation("Item adicionado à venda {NumeroVenda}: {Produto} x{Quantidade}", 
+            venda.NumeroVenda, produto.Nome, quantidade);
 
-            if (!produto.Ativo)
-                throw new InvalidOperationException("Produto inativo");
-
-            if (produto.ControlaEstoque && produto.EstoqueAtual < quantidade)
-                throw new InvalidOperationException($"Estoque insuficiente. Disponível: {produto.EstoqueAtual}");
-
-            var preco = precoUnitario ?? produto.PrecoVenda;
-            var precoTotal = preco * quantidade;
-            var total = precoTotal;
-
-            var item = new ItemVenda
-            {
-                VendaId = vendaId,
-                ProdutoId = produtoId,
-                NomeProduto = produto.Nome,
-                CodigoProduto = produto.Codigo,
-                Quantidade = quantidade,
-                PrecoUnitario = preco,
-                PrecoTotal = precoTotal,
-                Total = total,
-                CFOP = produto.CFOP,
-                NCM = produto.NCM,
-                CST = produto.CST,
-                CEST = produto.CEST,
-                AliquotaICMS = produto.AliquotaICMS,
-                AliquotaPIS = produto.AliquotaPIS,
-                AliquotaCOFINS = produto.AliquotaCOFINS,
-                AliquotaIPI = produto.AliquotaIPI
-            };
-
-            await _unitOfWork.Vendas.GetAsync(v => v.Id == vendaId);
-            await _unitOfWork.SaveChangesAsync();
-
-            // Atualizar totais da venda
-            await AtualizarTotaisVendaAsync(vendaId);
-
-            _logger.LogInformation("Item adicionado à venda {VendaId}: {Produto} x {Quantidade}", vendaId, produto.Nome, quantidade);
-            return item;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao adicionar item à venda");
-            throw;
-        }
+        return item;
     }
 
     public async Task<Venda> FinalizarVendaAsync(Guid vendaId, List<PagamentoVenda> pagamentos, bool emitirNFCe = true)
     {
-        try
+        var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
+        if (venda == null)
+            throw new InvalidOperationException("Venda não encontrada");
+
+        if (venda.Status != StatusVenda.EmAndamento)
+            throw new InvalidOperationException("Venda não está em andamento");
+
+        // Validar pagamentos
+        var totalPago = pagamentos.Sum(p => p.Valor);
+        if (totalPago < venda.Total)
+            throw new InvalidOperationException("Valor pago é menor que o total da venda");
+
+        // Adicionar pagamentos
+        foreach (var pagamento in pagamentos)
         {
-            await _unitOfWork.BeginTransactionAsync();
-
-            var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
-            if (venda == null)
-                throw new InvalidOperationException("Venda não encontrada");
-
-            if (venda.Status != StatusVenda.EmAndamento)
-                throw new InvalidOperationException("Venda não está em andamento");
-
-            // Validar pagamentos
-            var totalPagamentos = pagamentos.Sum(p => p.Valor);
-            if (totalPagamentos < venda.Total)
-                throw new InvalidOperationException("Valor dos pagamentos é menor que o total da venda");
-
-            // Adicionar pagamentos
-            foreach (var pagamento in pagamentos)
-            {
-                pagamento.VendaId = vendaId;
-                await _unitOfWork.Vendas.GetAsync(v => v.Id == vendaId);
-            }
-
-            // Atualizar venda
-            venda.Status = StatusVenda.Finalizada;
-            venda.TotalPago = totalPagamentos;
-            venda.Troco = totalPagamentos - venda.Total;
-            venda.EmitirNFCe = emitirNFCe;
-
-            // Baixar estoque
-            await BaixarEstoqueAsync(vendaId);
-
-            // Atualizar caixa
-            await AtualizarCaixaAsync(venda.CaixaId, venda.Total);
-
-            await _unitOfWork.SaveChangesAsync();
-            await _unitOfWork.CommitTransactionAsync();
-
-            _logger.LogInformation("Venda {NumeroVenda} finalizada com sucesso", venda.NumeroVenda);
-            return venda;
+            pagamento.VendaId = vendaId;
+            await _unitOfWork.Vendas.AddAsync(venda);
         }
-        catch (Exception ex)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            _logger.LogError(ex, "Erro ao finalizar venda");
-            throw;
-        }
+
+        // Atualizar venda
+        venda.Status = StatusVenda.Finalizada;
+        venda.TotalPago = totalPago;
+        venda.Troco = totalPago - venda.Total;
+        venda.EmitirNFCe = emitirNFCe;
+
+        // Baixar estoque
+        await BaixarEstoqueAsync(vendaId);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        _logger.LogInformation("Venda finalizada: {NumeroVenda}", venda.NumeroVenda);
+        return venda;
     }
 
     public async Task<Venda> CancelarVendaAsync(Guid vendaId, string justificativa)
     {
-        try
+        var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
+        if (venda == null)
+            throw new InvalidOperationException("Venda não encontrada");
+
+        if (venda.Status == StatusVenda.Cancelada)
+            throw new InvalidOperationException("Venda já está cancelada");
+
+        if (venda.Status == StatusVenda.Finalizada)
         {
-            await _unitOfWork.BeginTransactionAsync();
-
-            var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
-            if (venda == null)
-                throw new InvalidOperationException("Venda não encontrada");
-
-            if (venda.Status == StatusVenda.Cancelada)
-                throw new InvalidOperationException("Venda já está cancelada");
-
-            if (venda.Status == StatusVenda.Finalizada)
-            {
-                // Se a venda foi finalizada, estornar estoque
-                await EstornarEstoqueAsync(vendaId);
-            }
-
-            venda.Status = StatusVenda.Cancelada;
-            venda.Observacoes = justificativa;
-
-            await _unitOfWork.SaveChangesAsync();
-            await _unitOfWork.CommitTransactionAsync();
-
-            _logger.LogInformation("Venda {NumeroVenda} cancelada: {Justificativa}", venda.NumeroVenda, justificativa);
-            return venda;
+            // Estornar estoque se a venda foi finalizada
+            await EstornarEstoqueAsync(vendaId);
         }
-        catch (Exception ex)
-        {
-            await _unitOfWork.RollbackTransactionAsync();
-            _logger.LogError(ex, "Erro ao cancelar venda");
-            throw;
-        }
+
+        venda.Status = StatusVenda.Cancelada;
+        venda.Observacoes = justificativa;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        _logger.LogInformation("Venda cancelada: {NumeroVenda}", venda.NumeroVenda);
+        return venda;
     }
 
     private async Task<string> GerarNumeroVendaAsync(Guid caixaId)
@@ -228,9 +178,10 @@ public class VendaService
 
     private async Task BaixarEstoqueAsync(Guid vendaId)
     {
-        var itens = await _unitOfWork.Vendas.GetAsync(v => v.Id == vendaId);
-        
-        foreach (var item in itens)
+        var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
+        if (venda == null) return;
+
+        foreach (var item in venda.Itens)
         {
             var produto = await _unitOfWork.Produtos.GetByIdAsync(item.ProdutoId);
             if (produto == null || !produto.ControlaEstoque) continue;
@@ -241,7 +192,7 @@ public class VendaService
             var movimento = new MovimentoEstoque
             {
                 ProdutoId = produto.Id,
-                UsuarioId = item.Venda.UsuarioId,
+                UsuarioId = venda.UsuarioId,
                 VendaId = vendaId,
                 Tipo = TipoMovimentoEstoque.Saida,
                 Quantidade = item.Quantidade,
@@ -249,7 +200,7 @@ public class VendaService
                 QuantidadeAtual = produto.EstoqueAtual,
                 CustoUnitario = produto.PrecoCusto,
                 CustoTotal = produto.PrecoCusto * item.Quantidade,
-                Observacoes = $"Saída por venda {item.Venda.NumeroVenda}"
+                Observacoes = $"Saída por venda {venda.NumeroVenda}"
             };
 
             await _unitOfWork.MovimentosEstoque.AddAsync(movimento);
@@ -258,9 +209,10 @@ public class VendaService
 
     private async Task EstornarEstoqueAsync(Guid vendaId)
     {
-        var itens = await _unitOfWork.Vendas.GetAsync(v => v.Id == vendaId);
-        
-        foreach (var item in itens)
+        var venda = await _unitOfWork.Vendas.GetByIdAsync(vendaId);
+        if (venda == null) return;
+
+        foreach (var item in venda.Itens)
         {
             var produto = await _unitOfWork.Produtos.GetByIdAsync(item.ProdutoId);
             if (produto == null || !produto.ControlaEstoque) continue;
@@ -271,7 +223,7 @@ public class VendaService
             var movimento = new MovimentoEstoque
             {
                 ProdutoId = produto.Id,
-                UsuarioId = item.Venda.UsuarioId,
+                UsuarioId = venda.UsuarioId,
                 VendaId = vendaId,
                 Tipo = TipoMovimentoEstoque.Entrada,
                 Quantidade = item.Quantidade,
@@ -279,7 +231,7 @@ public class VendaService
                 QuantidadeAtual = produto.EstoqueAtual,
                 CustoUnitario = produto.PrecoCusto,
                 CustoTotal = produto.PrecoCusto * item.Quantidade,
-                Observacoes = $"Estorno por cancelamento da venda {item.Venda.NumeroVenda}"
+                Observacoes = $"Estorno por cancelamento da venda {venda.NumeroVenda}"
             };
 
             await _unitOfWork.MovimentosEstoque.AddAsync(movimento);

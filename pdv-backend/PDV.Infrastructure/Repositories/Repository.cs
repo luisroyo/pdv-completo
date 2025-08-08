@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PDV.Core.Interfaces;
 using PDV.Infrastructure.Data;
+using System.Linq.Expressions;
 
 namespace PDV.Infrastructure.Repositories;
 

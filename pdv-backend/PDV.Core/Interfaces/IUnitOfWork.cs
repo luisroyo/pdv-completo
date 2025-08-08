@@ -1,3 +1,5 @@
+using PDV.Core.Entities;
+
 namespace PDV.Core.Interfaces;
 
 public interface IUnitOfWork : IDisposable
@@ -10,8 +12,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<Caixa> Caixas { get; }
     IRepository<Venda> Vendas { get; }
     IRepository<MovimentoEstoque> MovimentosEstoque { get; }
-    IRepository<NotaFiscal> NotasFiscais { get; }
-    IRepository<CupomDesconto> CuponsDesconto { get; }
+    IRepository<MovimentoCaixa> MovimentosCaixa { get; }
     
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();
