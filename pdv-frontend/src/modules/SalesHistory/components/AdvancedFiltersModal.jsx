@@ -247,7 +247,7 @@ const AdvancedFiltersModal = ({ isOpen, onClose, onApplyFilters, currentFilters 
                                         inicioSemana.setDate(inicioSemana.getDate() - inicioSemana.getDay())
                                         const fimSemana = new Date()
                                         fimSemana.setDate(inicioSemana.getDate() + 6)
-                                        
+
                                         setFilters(prev => ({
                                             ...prev,
                                             dataInicio: inicioSemana.toISOString().split('T')[0],
@@ -264,7 +264,7 @@ const AdvancedFiltersModal = ({ isOpen, onClose, onApplyFilters, currentFilters 
                                         inicioMes.setDate(1)
                                         const fimMes = new Date()
                                         fimMes.setMonth(fimMes.getMonth() + 1, 0)
-                                        
+
                                         setFilters(prev => ({
                                             ...prev,
                                             dataInicio: inicioMes.toISOString().split('T')[0],
