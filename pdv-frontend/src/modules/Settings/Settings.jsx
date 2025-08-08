@@ -46,8 +46,8 @@ const Settings = () => {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === tab.id
-                                            ? 'bg-primary text-white'
-                                            : 'text-text hover:bg-accent'
+                                        ? 'bg-primary text-white'
+                                        : 'text-text hover:bg-accent'
                                         }`}
                                 >
                                     <span className="text-lg">{tab.icon}</span>
@@ -90,8 +90,8 @@ const GeralSettings = () => {
                                 key={key}
                                 onClick={() => setTheme(key)}
                                 className={`p-4 rounded-lg border-2 transition-all ${currentTheme === key
-                                        ? 'border-primary bg-primary/10'
-                                        : 'border-border hover:border-primary/50'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-border hover:border-primary/50'
                                     }`}
                             >
                                 <div className="flex items-center space-x-3">
