@@ -34,12 +34,12 @@ const OfflineMode = () => {
         if (!isOnline) return
 
         setSyncStatus('syncing')
-        
+
         // Simular processo de sincronização
         setTimeout(() => {
             setSyncStatus('success')
             setPendingData({ vendas: 0, movimentacoes: 0, produtos: 0 })
-            
+
             // Reset status após 3 segundos
             setTimeout(() => setSyncStatus('idle'), 3000)
         }, 2000)
@@ -93,7 +93,7 @@ const OfflineMode = () => {
                     {/* Status de conectividade */}
                     <div className="bg-surface border border-border rounded-lg p-6">
                         <h2 className="text-xl font-semibold text-text mb-4">Status de Conectividade</h2>
-                        
+
                         <div className="space-y-4">
                             <div className="flex items-center justify-between p-4 bg-background rounded-lg">
                                 <div className="flex items-center space-x-3">
@@ -128,7 +128,7 @@ const OfflineMode = () => {
                     {/* Dados pendentes */}
                     <div className="bg-surface border border-border rounded-lg p-6">
                         <h2 className="text-xl font-semibold text-text mb-4">Dados Pendentes</h2>
-                        
+
                         <div className="space-y-4">
                             <div className="flex items-center justify-between p-4 bg-background rounded-lg">
                                 <div className="flex items-center space-x-3">
@@ -169,11 +169,10 @@ const OfflineMode = () => {
                             <button
                                 onClick={handleSync}
                                 disabled={!isOnline || syncStatus === 'syncing'}
-                                className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
-                                    !isOnline || syncStatus === 'syncing'
+                                className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${!isOnline || syncStatus === 'syncing'
                                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                         : 'bg-primary text-white hover:bg-primary/90'
-                                }`}
+                                    }`}
                             >
                                 {syncStatus === 'syncing' ? (
                                     <div className="flex items-center justify-center space-x-2">
@@ -190,7 +189,7 @@ const OfflineMode = () => {
                     {/* Histórico de sincronização */}
                     <div className="bg-surface border border-border rounded-lg p-6 lg:col-span-2">
                         <h2 className="text-xl font-semibold text-text mb-4">Histórico de Sincronização</h2>
-                        
+
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
@@ -244,7 +243,7 @@ const OfflineMode = () => {
                     {/* Configurações de sincronização */}
                     <div className="bg-surface border border-border rounded-lg p-6 lg:col-span-2">
                         <h2 className="text-xl font-semibold text-text mb-4">Configurações de Sincronização</h2>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">

@@ -45,11 +45,10 @@ const Settings = () => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                                        activeTab === tab.id
+                                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === tab.id
                                             ? 'bg-primary text-white'
                                             : 'text-text hover:bg-accent'
-                                    }`}
+                                        }`}
                                 >
                                     <span className="text-lg">{tab.icon}</span>
                                     <span className="font-medium">{tab.label}</span>
@@ -81,7 +80,7 @@ const GeralSettings = () => {
         <div className="space-y-6">
             <div>
                 <h2 className="text-xl font-semibold text-text mb-4">Configurações Gerais</h2>
-                
+
                 {/* Tema */}
                 <div className="bg-surface border border-border rounded-lg p-6">
                     <h3 className="text-lg font-medium text-text mb-4">Tema do Sistema</h3>
@@ -90,14 +89,13 @@ const GeralSettings = () => {
                             <button
                                 key={key}
                                 onClick={() => setTheme(key)}
-                                className={`p-4 rounded-lg border-2 transition-all ${
-                                    currentTheme === key
+                                className={`p-4 rounded-lg border-2 transition-all ${currentTheme === key
                                         ? 'border-primary bg-primary/10'
                                         : 'border-border hover:border-primary/50'
-                                }`}
+                                    }`}
                             >
                                 <div className="flex items-center space-x-3">
-                                    <div 
+                                    <div
                                         className="w-4 h-4 rounded-full"
                                         style={{ backgroundColor: theme.colors.primary }}
                                     />
@@ -147,7 +145,7 @@ const FiscalSettings = () => {
         <div className="space-y-6">
             <div>
                 <h2 className="text-xl font-semibold text-text mb-4">Configurações Fiscais</h2>
-                
+
                 {/* NFC-e */}
                 <div className="bg-surface border border-border rounded-lg p-6">
                     <h3 className="text-lg font-medium text-text mb-4">NFC-e</h3>
@@ -161,24 +159,24 @@ const FiscalSettings = () => {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Certificado Digital</label>
-                            <input 
-                                type="file" 
+                            <input
+                                type="file"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 accept=".pfx,.p12"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Número de Série</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 placeholder="00000000000000000000000000000000000000000000"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">CSC</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 placeholder="Código de Segurança do Contribuinte"
                             />
@@ -199,8 +197,8 @@ const FiscalSettings = () => {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Código de Ativação</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 placeholder="12345678"
                             />
@@ -218,7 +216,7 @@ const HardwareSettings = () => {
         <div className="space-y-6">
             <div>
                 <h2 className="text-xl font-semibold text-text mb-4">Configurações de Hardware</h2>
-                
+
                 {/* Impressora */}
                 <div className="bg-surface border border-border rounded-lg p-6">
                     <h3 className="text-lg font-medium text-text mb-4">Impressora Térmica</h3>
@@ -294,7 +292,7 @@ const BackupSettings = () => {
         <div className="space-y-6">
             <div>
                 <h2 className="text-xl font-semibold text-text mb-4">Configurações de Backup</h2>
-                
+
                 {/* Backup automático */}
                 <div className="bg-surface border border-border rounded-lg p-6">
                     <h3 className="text-lg font-medium text-text mb-4">Backup Automático</h3>
@@ -313,8 +311,8 @@ const BackupSettings = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-text mb-2">Intervalo (horas)</label>
-                                <input 
-                                    type="number" 
+                                <input
+                                    type="number"
                                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                     defaultValue="24"
                                     min="1"
@@ -322,8 +320,8 @@ const BackupSettings = () => {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-text mb-2">Retenção (dias)</label>
-                                <input 
-                                    type="number" 
+                                <input
+                                    type="number"
                                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                     defaultValue="30"
                                     min="1"
@@ -345,7 +343,7 @@ const BackupSettings = () => {
                                 Restaurar Backup
                             </button>
                         </div>
-                        
+
                         <div className="bg-background border border-border rounded-lg p-4">
                             <h4 className="font-medium text-text mb-2">Últimos Backups</h4>
                             <div className="space-y-2 text-sm">
@@ -376,7 +374,7 @@ const UsuariosSettings = () => {
         <div className="space-y-6">
             <div>
                 <h2 className="text-xl font-semibold text-text mb-4">Gerenciamento de Usuários</h2>
-                
+
                 {/* Lista de usuários */}
                 <div className="bg-surface border border-border rounded-lg p-6">
                     <div className="flex justify-between items-center mb-4">
@@ -385,7 +383,7 @@ const UsuariosSettings = () => {
                             Novo Usuário
                         </button>
                     </div>
-                    
+
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
@@ -441,39 +439,39 @@ const EmpresaSettings = () => {
         <div className="space-y-6">
             <div>
                 <h2 className="text-xl font-semibold text-text mb-4">Dados da Empresa</h2>
-                
+
                 {/* Informações da empresa */}
                 <div className="bg-surface border border-border rounded-lg p-6">
                     <h3 className="text-lg font-medium text-text mb-4">Informações Gerais</h3>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Razão Social</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="Empresa Exemplo LTDA"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Nome Fantasia</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="Empresa Exemplo"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">CNPJ</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="00.000.000/0001-00"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Inscrição Estadual</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="000.000.000"
                             />
@@ -487,8 +485,8 @@ const EmpresaSettings = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">CEP</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="00000-000"
                             />
@@ -503,24 +501,24 @@ const EmpresaSettings = () => {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Cidade</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="São Paulo"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Bairro</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="Centro"
                             />
                         </div>
                         <div className="col-span-2">
                             <label className="block text-sm font-medium text-text mb-2">Endereço</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="Rua Exemplo, 123"
                             />
@@ -534,16 +532,16 @@ const EmpresaSettings = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Telefone</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="(11) 0000-0000"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-text mb-2">Email</label>
-                            <input 
-                                type="email" 
+                            <input
+                                type="email"
                                 className="w-full px-3 py-2 border border-border rounded-lg bg-background text-text"
                                 defaultValue="contato@empresa.com"
                             />
