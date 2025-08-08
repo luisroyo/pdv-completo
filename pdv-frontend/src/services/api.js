@@ -113,7 +113,9 @@ export const salesService = {
   list: (params) => api.get('/vendas', { params }),
   addItem: (saleId, item) => api.post(`/vendas/${saleId}/itens`, item),
   finalize: (saleId, paymentData) => api.post(`/vendas/${saleId}/finalizar`, paymentData),
-  cancel: (saleId, reason) => api.post(`/vendas/${saleId}/cancelar`, { reason })
+  cancel: (saleId, reason) => api.post(`/vendas/${saleId}/cancelar`, { reason }),
+  getSummary: (params) => api.get('/vendas/resumo', { params }),
+  getByCustomer: (customerId) => api.get(`/vendas/cliente/${customerId}`)
 }
 
 // Serviço de produtos
@@ -139,10 +141,14 @@ export const customersService = {
 // Serviço de caixa
 export const cashRegisterService = {
   open: (data) => api.post('/caixa/abrir', data),
-  close: (data) => api.post('/caixa/fechar', data),
-  getStatus: () => api.get('/caixa/status'),
-  addMovement: (movementData) => api.post('/caixa/movimentos', movementData),
-  getMovements: (params) => api.get('/caixa/movimentos', { params })
+  close: (id, data) => api.post(`/caixa/${id}/fechar`, data),
+  getById: (id) => api.get(`/caixa/${id}`),
+  getCurrent: () => api.get('/caixa/atual'),
+  list: (params) => api.get('/caixa', { params }),
+  addMovement: (id, movementData) => api.post(`/caixa/${id}/movimentacoes`, movementData),
+  getMovements: (id, params) => api.get(`/caixa/${id}/movimentacoes`, { params }),
+  getMovement: (id) => api.get(`/caixa/movimentacoes/${id}`),
+  getSummary: (id) => api.get(`/caixa/${id}/resumo`)
 }
 
 // Serviço de relatórios
