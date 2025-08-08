@@ -14,6 +14,7 @@ import CashRegister from './modules/CashRegister/CashRegister'
 import SalesHistory from './modules/SalesHistory/SalesHistory'
 import Products from './modules/Products/Products'
 import Customers from './modules/Customers/Customers'
+import Fiscal from './modules/Fiscal/Fiscal'
 import Settings from './modules/Settings/Settings'
 import OfflineMode from './modules/OfflineMode/OfflineMode'
 
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/sales-history" element={<SalesHistory />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/customers" element={<Customers />} />
+                    <Route path="/fiscal" element={<Fiscal />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/offline" element={<OfflineMode />} />
 

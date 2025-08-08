@@ -174,5 +174,17 @@ export const syncService = {
   markSynced: (ids) => api.post('/sync/mark-synced', { ids })
 }
 
+// Serviço fiscal
+export const fiscalService = {
+  emitirNFCe: (data) => api.post('/fiscal/nfce/emitir', data),
+  cancelarNFCe: (data) => api.post('/fiscal/nfce/cancelar', data),
+  emitirSAT: (data) => api.post('/fiscal/sat/emitir', data),
+  cancelarSAT: (data) => api.post('/fiscal/sat/cancelar', data),
+  verificarStatusSAT: () => api.get('/fiscal/sat/status'),
+  consultarSAT: (chaveAcesso) => api.get(`/fiscal/sat/consultar/${chaveAcesso}`),
+  obterDocumentosFiscais: (vendaId) => api.get(`/fiscal/documentos/${vendaId}`),
+  relatorioFiscal: (params) => api.get('/fiscal/relatorio', { params })
+}
+
 // Exporta instância do axios para uso direto
 export default api 
